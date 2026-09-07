@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://ckiirwebij0sj"]
+
+[ext_resource type="Script" uid="uid://cn25fmd47ju4d" path="res://scripts/pico_player.gd" id="1_mx82h"]
+[ext_resource type="Script" uid="uid://braca0msn5vhe" path="res://scripts/pico_locomotion.gd" id="2_1ppb0"]
+[ext_resource type="Script" uid="uid://jl3b01q112h" path="res://scripts/pico_turning.gd" id="3_b6jm1"]
+[ext_resource type="Script" uid="uid://sxuamcqiywi4" path="res://scripts/pico_teleportation.gd" id="3_v3s77"]
+[ext_resource type="Script" uid="uid://v4g7xcqinq3l" path="res://scripts/pico_grabber.gd" id="5_oy4fi"]
+[ext_resource type="Script" uid="uid://cqk8j5736pwj5" path="res://scripts/jump_controller.gd" id="6_ymqo2"]
+
+[sub_resource type="CapsuleShape3D" id="Capsule_player"]
+radius = 0.15
+height = 1.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_xwxos"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vro76"]
+radius = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_vro76"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="PicoPlayer" type="CharacterBody3D" unique_id=1622689351]
+collision_layer = 2
+floor_snap_length = 0.2
+script = ExtResource("1_mx82h")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=311092201]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+shape = SubResource("Capsule_player")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=1841479747]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=331719699]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+current = true
+
+[node name="LeftController" type="XRController3D" parent="XROrigin3D" unique_id=25322211]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
+tracker = &"left_hand"
+show_when_tracked = true
+
+[node name="test_hand" type="MeshInstance3D" parent="XROrigin3D/LeftController" unique_id=1111303473]
+mesh = SubResource("BoxMesh_xwxos")
+
+[node name="Area3D" type="Area3D" parent="XROrigin3D/LeftController" unique_id=1677669155]
+collision_layer = 32
+collision_mask = 16
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/LeftController/Area3D" unique_id=1887207105]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.07022703)
+shape = SubResource("SphereShape3D_vro76")
+
+[node name="RightController" type="XRController3D" parent="XROrigin3D" unique_id=169371018]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+tracker = &"right_hand"
+show_when_tracked = true
+
+[node name="test_hand" type="MeshInstance3D" parent="XROrigin3D/RightController" unique_id=1926427185]
+mesh = SubResource("BoxMesh_vro76")
+
+[node name="Area3D" type="Area3D" parent="XROrigin3D/RightController" unique_id=1273816391]
+collision_layer = 32
+collision_mask = 16
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/RightController/Area3D" unique_id=512574621]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.07022703)
+shape = SubResource("SphereShape3D_vro76")
+
+[node name="pico_locomotion" type="Node" parent="." unique_id=1313194356 node_paths=PackedStringArray("controller", "player", "camera")]
+script = ExtResource("2_1ppb0")
+controller = NodePath("../XROrigin3D/RightController")
+player = NodePath("..")
+camera = NodePath("../XROrigin3D/XRCamera3D")
+
+[node name="pico_turning" type="Node" parent="." unique_id=1313379043 node_paths=PackedStringArray("controller", "player", "camera")]
+script = ExtResource("3_b6jm1")
+controller = NodePath("../XROrigin3D/LeftController")
+player = NodePath("..")
+camera = NodePath("../XROrigin3D/XRCamera3D")
+turn_mode = 0
+
+[node name="pico_teleportation" type="Node" parent="." unique_id=1547714413 node_paths=PackedStringArray("controller", "player", "camera")]
+script = ExtResource("3_v3s77")
+controller = NodePath("../XROrigin3D/RightController")
+player = NodePath("..")
+camera = NodePath("../XROrigin3D/XRCamera3D")
+thumbstick_action = &"primary"
+
+[node name="pico_grabber_left" type="Node" parent="." unique_id=993133880 node_paths=PackedStringArray("controller", "grab_area")]
+script = ExtResource("5_oy4fi")
+controller = NodePath("../XROrigin3D/LeftController")
+grab_area = NodePath("../XROrigin3D/LeftController/Area3D")
+grabbable_collision_mask = 32
+follow_hand_rotation = true
+lock_rotation_while_held = false
+
+[node name="pico_grabber_right" type="Node" parent="." unique_id=120389291 node_paths=PackedStringArray("controller", "grab_area")]
+script = ExtResource("5_oy4fi")
+controller = NodePath("../XROrigin3D/RightController")
+grab_area = NodePath("../XROrigin3D/RightController/Area3D")
+grabbable_collision_mask = 32
+follow_hand_rotation = true
+lock_rotation_while_held = false
+
+[node name="pico_jump_controller" type="Node" parent="." unique_id=1383638336 node_paths=PackedStringArray("player")]
+script = ExtResource("6_ymqo2")
+player = NodePath("..")

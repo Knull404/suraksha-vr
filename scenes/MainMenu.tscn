@@ -1,0 +1,135 @@
+[gd_scene format=3 uid="uid://d3m4i1n2m3e4n"]
+
+[ext_resource type="Script" uid="uid://d0tiyrtcj0ku5" path="res://scripts/main_menu_manager.gd" id="1_mgr"]
+[ext_resource type="Shader" uid="uid://c4f5pw31mfuto" path="res://shaders/desert_night_sky.gdshader" id="2_sky"]
+[ext_resource type="Script" uid="uid://cn25fmd47ju4d" path="res://scripts/pico_player.gd" id="3_plr"]
+[ext_resource type="Script" uid="uid://dv8lqsg0qpveq" path="res://scripts/vr_menu_canvas.gd" id="4_canvas"]
+[ext_resource type="Script" uid="uid://braca0msn5vhe" path="res://scripts/pico_locomotion.gd" id="5_loc"]
+[ext_resource type="Script" uid="uid://jl3b01q112h" path="res://scripts/pico_turning.gd" id="6_turn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_night"]
+shader = ExtResource("2_sky")
+shader_parameter/sky_top_color = Color(0.01, 0.02, 0.07, 1)
+shader_parameter/sky_horizon_color = Color(0.05, 0.09, 0.18, 1)
+shader_parameter/moon_color = Color(0.95, 0.97, 1, 1)
+shader_parameter/moon_halo_color = Color(0.2, 0.45, 0.85, 1)
+shader_parameter/moon_direction = Vector3(0.25, 0.5, -0.82)
+shader_parameter/moon_size = 0.038
+shader_parameter/moon_glow = 0.35
+
+[sub_resource type="Sky" id="Sky_night"]
+sky_material = SubResource("ShaderMaterial_night")
+
+[sub_resource type="Environment" id="Environment_night"]
+background_mode = 2
+sky = SubResource("Sky_night")
+ambient_light_source = 3
+ambient_light_color = Color(0.1, 0.15, 0.3, 1)
+ambient_light_energy = 0.65
+reflected_light_source = 2
+tonemap_mode = 2
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.05, 0.08, 0.18, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sand"]
+albedo_color = Color(0.64, 0.52, 0.36, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="BoxMesh_sand"]
+material = SubResource("StandardMaterial3D_sand")
+size = Vector3(120, 0.2, 120)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sand"]
+size = Vector3(120, 0.2, 120)
+
+[sub_resource type="SphereMesh" id="SphereMesh_dune"]
+material = SubResource("StandardMaterial3D_sand")
+radius = 15.0
+height = 7.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_plr"]
+radius = 0.15
+height = 1.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_hand"]
+size = Vector3(0.08, 0.08, 0.08)
+
+[node name="MainMenuRoot" type="Node3D" unique_id=1324078326 node_paths=PackedStringArray("player", "vr_menu_canvas")]
+script = ExtResource("1_mgr")
+player = NodePath("MainMenuPlayer")
+vr_menu_canvas = NodePath("VRMenuCanvas")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1570281568]
+environment = SubResource("Environment_night")
+
+[node name="MoonLight" type="DirectionalLight3D" parent="." unique_id=555315051]
+transform = Transform3D(0.9238808, -0.21715672, 0.3150987, 0, 0.8233993, 0.56746244, -0.38268033, -0.5242677, 0.7607228, 0, 481.1875, -275.45172)
+light_color = Color(0.72, 0.85, 1, 1)
+shadow_enabled = true
+shadow_blur = 1.5
+sky_mode = 1
+
+[node name="DesertFloor" type="StaticBody3D" parent="." unique_id=260204636]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="DesertFloor" unique_id=616686624]
+mesh = SubResource("BoxMesh_sand")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DesertFloor" unique_id=221242497]
+shape = SubResource("BoxShape3D_sand")
+
+[node name="Dune1" type="MeshInstance3D" parent="." unique_id=1597612865]
+transform = Transform3D(2, 0, 0, 0, 0.7, 0, 0, 0, 2, -30, -1, -35)
+mesh = SubResource("SphereMesh_dune")
+
+[node name="Dune2" type="MeshInstance3D" parent="." unique_id=2087486174]
+transform = Transform3D(2.5, 0, 0, 0, 0.9, 0, 0, 0, 2.5, 32, -1.5, -40)
+mesh = SubResource("SphereMesh_dune")
+
+[node name="MainMenuPlayer" type="CharacterBody3D" parent="." unique_id=135558323]
+collision_layer = 2
+script = ExtResource("3_plr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainMenuPlayer" unique_id=514884926]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+shape = SubResource("CapsuleShape3D_plr")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="MainMenuPlayer" unique_id=1425363326]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="MainMenuPlayer/XROrigin3D" unique_id=1526290840]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+current = true
+
+[node name="LeftController" type="XRController3D" parent="MainMenuPlayer/XROrigin3D" unique_id=1738860352]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
+tracker = &"left_hand"
+
+[node name="test_hand" type="MeshInstance3D" parent="MainMenuPlayer/XROrigin3D/LeftController" unique_id=1792383666]
+mesh = SubResource("BoxMesh_hand")
+
+[node name="RightController" type="XRController3D" parent="MainMenuPlayer/XROrigin3D" unique_id=834578740]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+tracker = &"right_hand"
+
+[node name="test_hand" type="MeshInstance3D" parent="MainMenuPlayer/XROrigin3D/RightController" unique_id=282744903]
+mesh = SubResource("BoxMesh_hand")
+
+[node name="pico_locomotion" type="Node" parent="MainMenuPlayer" unique_id=1851446212 node_paths=PackedStringArray("controller", "player", "camera")]
+script = ExtResource("5_loc")
+controller = NodePath("../XROrigin3D/RightController")
+player = NodePath("..")
+camera = NodePath("../XROrigin3D/XRCamera3D")
+
+[node name="pico_turning" type="Node" parent="MainMenuPlayer" unique_id=139466424 node_paths=PackedStringArray("controller", "player", "camera")]
+script = ExtResource("6_turn")
+controller = NodePath("../XROrigin3D/LeftController")
+player = NodePath("..")
+camera = NodePath("../XROrigin3D/XRCamera3D")
+turn_mode = 0
+
+[node name="VRMenuCanvas" type="Node3D" parent="." unique_id=390797871 node_paths=PackedStringArray("player", "left_controller", "right_controller")]
+script = ExtResource("4_canvas")
+player = NodePath("../MainMenuPlayer")
+left_controller = NodePath("../MainMenuPlayer/XROrigin3D/LeftController")
+right_controller = NodePath("../MainMenuPlayer/XROrigin3D/RightController")
