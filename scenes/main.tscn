@@ -1,14 +1,13 @@
 [gd_scene format=3 uid="uid://u3uau1e58774"]
 
-[ext_resource type="Script" uid="uid://b73ux65nbyk2n" path="res://scripts/xr_bootstrap.gd" id="1_boot"]
+[ext_resource type="Script" uid="uid://b73ux65nbyk2n" path="res://scripts/vr_setup/xr_bootstrap.gd" id="1_boot"]
 [ext_resource type="Script" uid="uid://cn25fmd47ju4d" path="res://scripts/pico_player.gd" id="2_choun"]
 [ext_resource type="Shader" uid="uid://c62vornq8r6e8" path="res://shaders/sunset_clouds.gdshader" id="3_sugp2"]
-[ext_resource type="Script" uid="uid://braca0msn5vhe" path="res://scripts/pico_locomotion.gd" id="3_ya4ey"]
-[ext_resource type="Script" uid="uid://jl3b01q112h" path="res://scripts/pico_turning.gd" id="4_eb6dy"]
-[ext_resource type="Script" uid="uid://bwc7a3f0pmffm" path="res://scripts/Objects/pico_interactables.gd" id="4_jyhfs"]
-[ext_resource type="Script" uid="uid://sxuamcqiywi4" path="res://scripts/pico_teleportation.gd" id="5_trceg"]
-[ext_resource type="Script" uid="uid://v4g7xcqinq3l" path="res://scripts/pico_grabber.gd" id="6_a8y0u"]
-[ext_resource type="Script" uid="uid://cpym7c2o0dljw" path="res://scripts/game_stage.gd" id="10_jkv2x"]
+[ext_resource type="Script" uid="uid://braca0msn5vhe" path="res://scripts/player_functions/pico_locomotion.gd" id="3_ya4ey"]
+[ext_resource type="Script" uid="uid://jl3b01q112h" path="res://scripts/player_functions/pico_turning.gd" id="4_eb6dy"]
+[ext_resource type="Script" uid="uid://bwc7a3f0pmffm" path="res://scripts/objects/pico_interactables.gd" id="4_jyhfs"]
+[ext_resource type="Script" uid="uid://sxuamcqiywi4" path="res://scripts/player_functions/pico_teleportation.gd" id="5_trceg"]
+[ext_resource type="Script" uid="uid://v4g7xcqinq3l" path="res://scripts/player_functions/pico_grabber.gd" id="6_a8y0u"]
 
 [sub_resource type="CapsuleShape3D" id="Capsule_player"]
 radius = 0.15
@@ -379,9 +378,3 @@ shape = SubResource("SphereShape3D_yfv2a")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="GameRoot/Cube3" unique_id=755931313]
 mesh = SubResource("BoxMesh_muem4")
-
-[node name="GameStage" type="Node3D" parent="." unique_id=1780815358 node_paths=PackedStringArray("left_controller", "right_controller", "game_root")]
-script = ExtResource("10_jkv2x")
-left_controller = NodePath("../PicoPlayer/XROrigin3D/LeftController")
-right_controller = NodePath("../PicoPlayer/XROrigin3D/RightController")
-game_root = NodePath("../GameRoot")

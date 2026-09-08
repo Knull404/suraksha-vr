@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="SurakshaVR"
-run/main_scene="uid://d3m4i1n2m3e4n"
+run/main_scene="uid://u3uau1e58774"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="uid://c7a4tb6rfw11g"
 
@@ -75,4 +75,3 @@ openxr/enabled=true
 openxr/reference_space=1
 openxr/foveation_level=3
 shaders/enabled=true
-openxr/extensions/meta/color_space/starting_color_space=3

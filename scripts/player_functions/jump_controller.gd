@@ -19,12 +19,12 @@ class_name JumpController
 @export var allow_air_control: bool = false
 
 func _physics_process(_delta: float) -> void:
-    if not player:
-        return
-    # Only trigger jump when the action is just pressed.
-    if Input.is_action_just_pressed(jump_action):
-        var can_jump: bool = player.is_on_floor() or allow_air_control
-        if can_jump:
-            # Directly set the vertical component of the player's velocity.
-            player.velocity.y = jump_velocity
-            print("JumpController: player jumped with velocity %.2f" % jump_velocity)
+	if not player:
+		return
+	# Only trigger jump when the action is just pressed.
+	if Input.is_action_just_pressed(jump_action):
+		var can_jump: bool = player.is_on_floor() or allow_air_control
+		if can_jump:
+			# Directly set the vertical component of the player's velocity.
+			player.velocity.y = jump_velocity
+			print("JumpController: player jumped with velocity %.2f" % jump_velocity)
